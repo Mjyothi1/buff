@@ -23,6 +23,15 @@ export default function App() {
   const [boxBuilderOpen, setBoxBuilderOpen] = useState<boolean>(false);
   const [checkoutModalOpen, setCheckoutModalOpen] = useState<boolean>(false);
 
+  React.useEffect(() => {
+    // Aggressive cache purge to force WhatsApp and mobile browsers to fetch fresh code
+    if ('caches' in window) {
+      caches.keys().then((names) => {
+        names.forEach((name) => caches.delete(name));
+      });
+    }
+  }, []);
+
   const handleSelectFlavorById = (id: string) => {
     const found = FLAVORS_DATA.find((f) => f.id === id);
     if (found) {
