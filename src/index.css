@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-badge: 'Space Grotesk', sans-serif;
+    --color-primary: #D4FF00;
+    --color-secondary: #FF2E93;
+    --color-tertiary: #2E4CFF;
+    --color-licorice: #121212;
+    --color-canvas: #FAF8F5;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #FAF8F5;
+    color: #121212;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-syne {
+    font-family: 'Syne', sans-serif;
+  }
+
+  .font-space {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+/* Neo-brutalist utility classes matching the design spec */
+.brutal-border {
+  border: 2.5px solid #121212;
+}
+
+.brutal-border-b {
+  border-bottom: 2.5px solid #121212;
+}
+
+.brutal-border-t {
+  border-top: 2.5px solid #121212;
+}
+
+.brutal-border-l {
+  border-left: 2.5px solid #121212;
+}
+
+.brutal-border-r {
+  border-right: 2.5px solid #121212;
+}
+
+.brutal-shadow {
+  box-shadow: 4px 4px 0px 0px #121212;
+}
+
+.brutal-shadow-sm {
+  box-shadow: 3px 3px 0px 0px #121212;
+}
+
+.brutal-shadow-lg {
+  box-shadow: 6px 6px 0px 0px #121212;
+}
+
+.brutal-shadow-blue {
+  box-shadow: 4px 4px 0px 0px #2E4CFF;
+}
+
+.brutal-shadow-pink {
+  box-shadow: 4px 4px 0px 0px #FF2E93;
+}
+
+.brutal-shadow-chartreuse {
+  box-shadow: 4px 4px 0px 0px #D4FF00;
+}
+
+.brutal-btn {
+  border: 2.5px solid #121212;
+  box-shadow: 4px 4px 0px 0px #121212;
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.brutal-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #121212;
+}
+
+.brutal-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px 0px 0px #121212;
+}
+
+.brutal-card {
+  border: 2.5px solid #121212;
+  box-shadow: 4px 4px 0px 0px #121212;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brutal-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #121212;
+}
+
+/* Marquee continuous scroll animations */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.animate-marquee-fast {
+  display: flex;
+  width: max-content;
+  animation: marquee 16s linear infinite;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-reverse 26s linear infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F5;
+  border-left: 2px solid #121212;
+}
+::-webkit-scrollbar-thumb {
+  background: #D4FF00;
+  border: 2px solid #121212;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF2E93;
+}

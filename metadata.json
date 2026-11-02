@@ -1,0 +1,8 @@
+{
+  "name": "BUFF - High-Protein Artisan Indulgence",
+  "description": "BUFF - India's premier high-protein artisan ice cream with Y2K neo-brutalist energy, 28g-34g protein per pint, and zero chalky guilt.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
