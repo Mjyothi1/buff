@@ -186,24 +186,43 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onOpenCheckout }) => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleApplyCoupon} className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Enter code (e.g. NEON15)"
-                    value={couponInput}
-                    onChange={(e) => {
-                      setCouponInput(e.target.value);
-                      setCouponError(null);
-                    }}
-                    className="flex-1 px-3 py-1.5 bg-[#FAF8F5] text-xs font-space font-bold brutal-border rounded-xl uppercase focus:outline-none focus:ring-2 focus:ring-[#D4FF00]"
-                  />
-                  <button
-                    type="submit"
-                    className="px-4 py-1.5 bg-[#121212] text-[#D4FF00] font-space font-bold text-xs uppercase rounded-xl brutal-border"
-                  >
-                    APPLY
-                  </button>
-                </form>
+                <div className="space-y-1.5">
+                  <form onSubmit={handleApplyCoupon} className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Enter code (e.g. BUFF15)"
+                      value={couponInput}
+                      onChange={(e) => {
+                        setCouponInput(e.target.value);
+                        setCouponError(null);
+                      }}
+                      className="flex-1 px-3 py-1.5 bg-[#FAF8F5] text-xs font-space font-bold brutal-border rounded-xl uppercase focus:outline-none focus:ring-2 focus:ring-[#D4FF00]"
+                    />
+                    <button
+                      type="submit"
+                      className="px-4 py-1.5 bg-[#121212] text-[#D4FF00] font-space font-bold text-xs uppercase rounded-xl brutal-border"
+                    >
+                      APPLY
+                    </button>
+                  </form>
+                  <div className="flex items-center gap-1.5 text-[10px] font-space text-[#121212]/80">
+                    <span>💡 Available:</span>
+                    <button
+                      type="button"
+                      onClick={() => applyPromoCode('BUFF15')}
+                      className="px-2 py-0.5 bg-[#D4FF00] text-[#121212] font-black rounded-md border border-[#121212] hover:scale-105 transition-transform"
+                    >
+                      BUFF15 (15% OFF)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => applyPromoCode('GAINZ100')}
+                      className="px-2 py-0.5 bg-white text-[#121212] font-bold rounded-md border border-[#121212] hover:scale-105 transition-transform"
+                    >
+                      GAINZ100 (₹150 OFF)
+                    </button>
+                  </div>
+                </div>
               )}
               {couponError && (
                 <p className="text-[11px] text-red-600 font-space font-semibold">

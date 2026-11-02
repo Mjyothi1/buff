@@ -7,11 +7,13 @@ interface CartContextType {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   addItem: (flavor: Flavor, quantity?: number) => void;
+  addBundle: (bundle: { size: number; title: string; price: number; pints: Flavor[] }) => void;
   addCustomPint: (customPint: CustomPint) => void;
   addMerchItem: (merch: MerchItem) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, delta: number) => void;
   clearCart: () => void;
+  totalItems: number;
   totalPints: number;
   totalProtein: number;
   subtotal: number;
@@ -27,36 +29,35 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const CART_STORAGE_KEY = 'buff_cart_items_v2';
+
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Cart initially starts empty (0 items)
   const [items, setItems] = useState<CartItem[]>(() => {
-    // Initial sample items so the user immediately experiences the interactive cart
-    return [
-      {
-        id: 'midnight-brownie',
-        flavorId: 'midnight-brownie',
-        name: 'MIDNIGHT BROWNIE OVERLOAD',
-        subtitle: '32g Protein • Dark Dutch Cacao & Fudge Lava',
-        image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=400&q=80',
-        price: 379,
-        protein: 32,
-        quantity: 2
-      },
-      {
-        id: 'glitch-berry-swirl',
-        flavorId: 'glitch-berry-swirl',
-        name: 'GLITCH BERRY CHEESECAKE',
-        subtitle: '28g Protein • Wild Marionberry Swirl',
-        image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=400&q=80',
-        price: 369,
-        protein: 28,
-        quantity: 1
+    try {
+      const saved = localStorage.getItem(CART_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
       }
-    ];
+    } catch {
+      // ignore
+    }
+    return [];
   });
 
   const [isOpen, setIsOpen] = useState(false);
   const [promoCode, setPromoCode] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState<string | null>('BUFF15');
+  const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
+
+  // Sync cart items with localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    } catch {
+      // ignore
+    }
+  }, [items]);
 
   const triggerConfetti = () => {
     try {
@@ -97,7 +98,38 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsOpen(true);
   };
 
+  const addBundle = (bundle: { size: number; title: string; price: number; pints: Flavor[] }) => {
+    const totalBundleProtein = bundle.pints.reduce((acc, p) => acc + p.protein, 0);
+    const leadImage = bundle.pints[0]?.image || '/assets/flavors/midnight-fudge-brownie.png';
+    const flavorNames = Array.from(new Set(bundle.pints.map((p) => p.name.split(' ')[0]))).join(', ');
+
+    setItems((prev) => [
+      ...prev,
+      {
+        id: `bundle-${Date.now()}`,
+        name: bundle.title,
+        subtitle: `${bundle.size} Pints (${totalBundleProtein}g Protein): ${flavorNames}`,
+        image: leadImage,
+        price: bundle.price,
+        protein: totalBundleProtein,
+        quantity: 1,
+        bundleSize: bundle.size
+      }
+    ]);
+    triggerConfetti();
+    setIsOpen(true);
+  };
+
   const addCustomPint = (customPint: CustomPint) => {
+    const baseImg =
+      customPint.baseId === 'base-dutch-fudge'
+        ? '/assets/flavors/midnight-fudge-brownie.png'
+        : customPint.baseId === 'base-golden-peanut'
+        ? '/assets/flavors/salted-peanut-crunch.png'
+        : customPint.baseId === 'base-uji-matcha'
+        ? '/assets/flavors/bronte-pistachio-matcha.png'
+        : '/assets/flavors/vanilla-bean-caviar.png';
+
     setItems((prev) => [
       ...prev,
       {
@@ -105,7 +137,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         customPint,
         name: customPint.name,
         subtitle: `${customPint.protein}g Protein • Base: ${customPint.baseName}`,
-        image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=400&q=80',
+        image: baseImg,
         price: customPint.price,
         protein: customPint.protein,
         quantity: customPint.quantity || 1
@@ -164,7 +196,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const totalPints = items.reduce(
-    (acc, item) => (item.isMerch ? acc : acc + item.quantity),
+    (acc, item) => (item.isMerch ? acc : acc + (item.bundleSize ? item.bundleSize * item.quantity : item.quantity)),
+    0
+  );
+
+  const totalItems = items.reduce(
+    (acc, item) => acc + item.quantity,
     0
   );
 
@@ -213,11 +250,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isOpen,
         setIsOpen,
         addItem,
+        addBundle,
         addCustomPint,
         addMerchItem,
         removeItem,
         updateQuantity,
         clearCart,
+        totalItems,
         totalPints,
         totalProtein,
         subtotal,

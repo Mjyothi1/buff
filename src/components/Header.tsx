@@ -13,7 +13,7 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveTab,
   onOpenBoxBuilder
 }) => {
-  const { totalPints, totalProtein, setIsOpen } = useCart();
+  const { totalPints, totalItems, totalProtein, setIsOpen } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -115,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <ShoppingBag className="w-4 h-4 text-[#121212]" />
             <span className="font-space font-extrabold text-sm">
-              {totalPints}
+              {totalPints > 0 ? totalPints : totalItems}
             </span>
             {totalProtein > 0 && (
               <span className="hidden sm:inline-block px-2 py-0.5 bg-[#2E4CFF] text-[#FAF8F5] text-[11px] font-space font-bold rounded-full">

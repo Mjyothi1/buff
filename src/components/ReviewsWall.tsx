@@ -57,7 +57,7 @@ export const ReviewsWall: React.FC = () => {
             WALL OF UNFILTERED RAVE
           </h2>
           <p className="font-sans text-base text-[#121212]/80 mt-1">
-            Over 250,000 pints churned and delivered across America. Read what lifters, trainers, and ice cream obsessives are saying.
+            Over 250,000 pints churned and delivered across India. Read what lifters, trainers, and ice cream obsessives are saying.
           </p>
         </div>
 

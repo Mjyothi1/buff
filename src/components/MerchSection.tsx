@@ -114,6 +114,7 @@ export const MerchSection: React.FC = () => {
                     <img
                       src={item.image}
                       alt={item.name}
+                      referrerPolicy="no-referrer"
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                     {item.badge && (

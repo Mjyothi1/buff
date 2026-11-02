@@ -11,7 +11,7 @@ interface BoxBuilderModalProps {
 }
 
 export const BoxBuilderModal: React.FC<BoxBuilderModalProps> = ({ isOpen, onClose }) => {
-  const { addItem, setIsOpen } = useCart();
+  const { addBundle, setIsOpen } = useCart();
   const [selectedSize, setSelectedSize] = useState<number>(6);
   const [selectedPints, setSelectedPints] = useState<Flavor[]>(() => [
     FLAVORS_DATA[0],
@@ -59,8 +59,12 @@ export const BoxBuilderModal: React.FC<BoxBuilderModalProps> = ({ isOpen, onClos
   };
 
   const handleAddBundleToCart = () => {
-    // Add all pints in the bundle to cart
-    selectedPints.forEach((p) => addItem(p, 1));
+    addBundle({
+      size: selectedSize,
+      title: currentBundle.title,
+      price: currentBundle.price,
+      pints: selectedPints
+    });
     try {
       confetti({
         particleCount: 60,
@@ -69,7 +73,6 @@ export const BoxBuilderModal: React.FC<BoxBuilderModalProps> = ({ isOpen, onClos
       });
     } catch {}
     onClose();
-    setIsOpen(true);
   };
 
   const totalBundleProtein = selectedPints.reduce((acc, p) => acc + p.protein, 0);
